@@ -1,165 +1,129 @@
-# Structured Query Language (SQL)
+# Object-Relational Mapping (ORM)
 
-> DB의 데이터 관리를 위해 사용하는 언어
+> Django에서 SQL없이 DB를 객체처럼 다루게 하는 방식
 
-## SQL 실행
+## SQL 관계
 
-#### SQL shell 생성 및 실행
+ORM -> SQL 출력
 
-```bash
-$ sqlite3 tutorial.sqlite3
-sqlite> .database
-```
-
-#### csv 파일 import
-
-```sqlite
-sqlite> .mode csv
-sqlite> .import name.csv tablename
-sqlite> .tables
-tablename
+```python
+print(ORM.query)
 ```
 
 
 
-## SQL 설정
+## 초기 설정
 
-```sql
-CREATE TABLE tablename (
-	id INTEGER PRIMARY KEY AUTOINCREMENT, -- PK 재사용 방지 (장고 기본값)
-    ...
-);
+1. Django 기본 세팅
+2. migrate
+3. sqlite 실행
+
+
+
+## CRUD
+
+### Read
+
+```python
+dbname.objects.all() # 전체 조회
+dbname.objects.get(pk=102) # 특정 조회
+```
+
+### Create
+
+```python
+dbname.objects.create(
+	first_name='길동',
+    last_name='홍',
+    age=100
+)
+```
+
+### Update
+
+```python
+user = dbname.objects.get(pk=102)
+user.last_name = '김'
+user.save()
+```
+
+### Delete
+
+```python
+dbname.objects.get(pk=102).delete()
 ```
 
 
 
-## SQL 분류
+## 기능 함수
 
-### DDL - 데이터 정의 언어
+- count
 
-- CREATE TABLE
-
-  ```sql
-  CREATE TABLE classmates (
-  	id INTEGER PRIMARY KEY, -- 이게 있으면 rowid 못쓰고 넣어줘야함
-  	name TEXT NOT NULL -- NOT NULL은 필수값
-  );
+  ```python
+  dbname.objects.count() # 전체 데이터 수
   ```
 
-- DROP TABLE (삭제)
+- filter
 
-  ```sql
-  DROP TABLE tablename;
+  ```python
+  dbname.objects.filter(age=30) # 조건 검색
   ```
 
-- ALTER TABLE (변경)
+- values
 
-  ```sql
-  ALTER TABLE tablename RENAME TO tablename2; -- 이름변경
-  ALTER TABLE tablename ADD COLUMN col3 INT; -- 컬럼추가 (NOT NULL 불가)
-  -- ADD COLUMN col4 INT NOT NULL DEFAULT 3; 이렇게 추가 가능
+  ```python
+  dbname.objects.filter(age=30).values('name') # 출력 값
   ```
 
-  
+#### 조건 키워드 (filter 사용)
 
-### DML - 데이터 조작 언어
+- 크기 대소
 
-- INSERT INTO
-
-  ```sql
-  -- 일부 열의 데이터만 넣는경우
-  INSERT INTO tablename (col1, col2)
-  VALUES (data1, data2);
-  
-  -- 전체 열의 데이터를 넣는경우
-  INSERT INTO tablename
-  VALUES (data1, data2, data3);
+  ```python
+  # __gte, gt, --lte, __lt
+  dbname.objects.filter(age__gte=30).count() # 나이 30 이상 수
   ```
 
-- SELECT
+- And
 
-  ```sql
-  SELECT rowid, col1, col2 -- 또는 전체(*)
-  FROM tablename;
+  ```python
+  dbname.objects.filter(조건1, 조건2) # 콤마로 and 구분
   ```
 
-  - LIMIT 숫자: 숫자 만큼만 조회. `OFFSET (숫자개수 넘김)`과 함께 쓰기도함
-  - WHERE: 특정 검색 조건 지정
-  - SELECT DISTINCT 컬럼: 중복 행 제거 조회, SELECT 바로 뒤에 써야함
+  > WHERE 조건1 AND 조건2;
 
-- UPDATE
+- Or
 
-  ```sql
-  UPDATE tablename
-  SET cal1=val1, cal2=val2
-  WHERE id=5;
+  ```python
+  from django.db.models import Q
+  dbname.objects.filter(Q(조건1) | Q(조건2))
   ```
 
-- DELETE
+  > WHERE 조건1 OR 조건2
 
-  ```sql
-  DELETE 
-  FROM tablename
-  WHERE id=5;
+- 패턴 검색
+
+  ```python
+  # 시작 값
+  dbname.objects.filter(phone__startswith='02-').count() # 02시작 수
+  ```
+
+- 정렬 검색
+
+  ```python
+  dbname.objects.order_by('-age')[:10] # 나이 역순 10명
   ```
 
   
 
-### DCL - 데이터 제어 언어
+## Django Aggregation
 
-- GRANT
-- REVOKE
-- COMMIT
-- ROLLBACK
+- Avg, Max, Min, Sum
 
-
-
-## Aggregate functions 
-
-- COUNT: 그룹의 항목 수
-
-  ```sql
-  SELECT COUNT(*) FROM tablename;
+  ```python
+  from django.db.models import Avg
+  dbname.objects.aggregate(Avg('인자'))
   ```
 
-- AVG/SUM: 평균/합 계산
-
-  ```sql
-  SELECT AVG(col1) FROM tablename;
-  ```
-
-- MAX/MIN: 최대값/최소값
-
-  ```sql
-  SELECT MAX(col1) FROM tablename;
-  ```
-
-## Clause
-
-- LIKE: 패턴 일치 조회. `WHERE 인자 LIKE '패턴'`
-  - %: 있을수도 없을수도
-  - _: 자리수
-
-- ORDER BY: `ORDER BY 컬럼 ASC`
-
-  - ASC: Ascending. 기본값 생략 가능
-  - DESC: Descending
-
-- GROUP BY: 요약 행 만듬. WHERE 뒤에 작성. 
-
-  ```sql
-  SELECT last_name, COUNT(*) AS num FROM users GROUP BY last_name;
-  --      조건        결과      변경 
-  ```
-
-  
-
-## Sqlite Shell 명령어
-
-```sqlite
-sqlite> .tables -- 모든 테이블 조회
-sqlite> .schema tablename -- 스키마 조회
-sqlite> .headers on -- 헤더 표시
-sqlite> .mode column -- 열 맞춤
-```
+- annotate: 주석을 달아줌 (원본 테이블 그대로)
 
