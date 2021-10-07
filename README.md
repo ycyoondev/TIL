@@ -1,5 +1,15 @@
 # Today I Learned (TIL)
 
-- Nothing Better Than COMMIT
-- 날것이라도 COMMIT을 통해 꾸준한 학습을 추구합니다.
+> 꾸준한 학습을 추구합니다.
 
+### Algorithm
+
+SW Expert Academy(SWEA), Baekjoon OJ, 프로그래머스
+
+### DB
+
+SQL, Oracle DB
+
+### Web
+
+Django
