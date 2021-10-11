@@ -6,10 +6,18 @@
 
 SW Expert Academy(SWEA), Baekjoon OJ, 프로그래머스
 
-### DB
+### Data
 
-SQL, Oracle DB
+SQL, Oracle DB, AI (w/ Tensorflow)
 
 ### Web
 
 Django
+
+
+
+### 공부 예정
+
+[데이콘]: http://www.yes24.com/Product/Goods/96816149	"데이콘 우승작 분석"
+[Tableau]: https://www.boostcourse.org/ds121	"Tableau"
+
