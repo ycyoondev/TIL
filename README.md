@@ -1,6 +1,8 @@
 # Today I Learned (TIL)
 
-> 꾸준한 학습을 추구합니다.
+> 꾸준한 학습과 정리를 위한 보관소입니다.
+>
+> 아래는 주요 키워드입니다.
 
 ### Algorithm
 
@@ -12,7 +14,7 @@ SQL, Oracle DB
 
 ### Web
 
-Django, Vue
+Django, Vue, Security, Protocol
 
 
 
