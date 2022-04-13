@@ -8,9 +8,9 @@
 
 SW Expert Academy(SWEA), Baekjoon OJ, 프로그래머스
 
-### DB
+### Computer Science
 
-SQL, Oracle DB
+네트워크, 데이터베이스, 운영체제
 
 ### DevOps
 
@@ -22,5 +22,5 @@ ML pipeline, ML flow
 
 ### Web
 
-Django, Vue, Security, Protocol
+Spring, Django, Vue, Security, Protocol
 
